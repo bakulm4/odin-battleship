@@ -1,0 +1,377 @@
+*{
+    /* box-sizing: border-box; */
+    padding: 0;
+    margin: 0;
+    border:0;
+}
+
+body{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size:24px;
+    height: 100vh;
+}
+
+ul{
+    list-style: none;
+}
+
+header{
+    display:grid;
+    /* width:100vw; */
+    padding:2em;
+    grid-template-columns: repeat(2,1fr);
+    align-items: center;
+    margin:10px auto;
+}
+
+.logo{
+    font-weight: 700;
+    font-size: 1.5em;
+    line-height: 1
+}
+
+.notification{
+    background: #f8f8f8;
+    padding: 0.5em;
+    width:400px;
+}
+
+.notification__game-over-lose {
+    background: red;
+    color: #fff
+}
+
+.notification__game-over-win {
+    background: green;
+    color: #fff;
+  }
+
+.notification-submit{
+    margin-top:0.8em;
+    padding:1px 6px;
+    /* background-color: buttonface;
+    color: buttontext; */
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonborder;
+    font-size:20px;
+    border-radius:5px;
+    cursor: pointer;
+}
+
+main{
+    /* height:100%; */
+    margin-top:3em;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.battlefield__self,.battlefield__rival{
+    display: flex;
+    gap:3em;
+}
+
+.battlefield-gap{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap:1em;
+}
+
+.battlefield-table{
+    border-collapse: collapse;
+    position:relative;
+    border-spacing: 0;
+}
+
+.battlefield-stat{
+    display:flex;
+    flex-direction: column;
+    align-items:flex-start;
+    gap:1em;
+}
+
+.battlefield__wait .battlefield-stat{
+    opacity:0.4;
+    pointer-events: none;
+}
+
+.battlefield__self .battlefield-stat{
+    order:-1;
+}
+
+.battlefield__wait .battlefield-table{
+    opacity:0.4;
+    pointer-events: none;
+}
+
+.battlefield-cell{
+    border:1px solid #b4b4ff;
+    position:relative;
+}
+
+.battlefield__wait .battlefield-cell{
+    border: 1px solid rgba(180,180,255,.5)!important;
+}
+
+.battlefield-cell-content{
+    height:2em;
+    width:2em;
+    position:relative;
+}
+
+.battlefield-cell-content.dragging{
+    box-shadow: 0 0 4px 4px rgba(52, 52, 230, 1);
+}
+
+.battlefield__rival .battlefield-cell__empty:hover .battlefield-cell-content::after {
+    border: 2px solid #40bf44;
+    background: rgba(64,191,68,.05);
+    position: absolute;
+    width: 2em;
+    height: 2em;
+    top: 0;
+    left: 0;
+    margin: -2px;
+    content: "";
+    display: block;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+.battlefield-cell__hit .battlefield-cell-content{
+    background-color: #fafad2;
+}
+
+.battlefield-cell__miss .battlefield-cell-content{
+    background-color:#f2f4f8;
+}
+
+.battlefield-cell__done::after{
+    content:"";
+    border: 2px solid red;
+    margin: -1px;
+    z-index:3;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2em;
+    width: 2em;
+}
+
+.battlefield-cell__hit .battlefield-cell-content::before,.battlefield-cell__hit .battlefield-cell-content::after {
+    content: "";
+    position: absolute;
+    z-index: 3;
+    background: red;
+    transform: rotate(-45deg)
+} 
+
+.battlefield-cell__hit .battlefield-cell-content::before {
+    left: 50%;
+    width: 2px;
+    top: -25%;
+    height: 150%;
+    margin-top: 1px;
+}
+
+.battlefield-cell__hit .battlefield-cell-content::after {
+    top: 50%;
+    height: 2px;
+    left: -25%;
+    width: 150%;
+    margin-left: -1px;
+}
+
+.battlefield-cell__miss .battlefield-cell-content::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 4px;
+    width: 4px;
+    background: #333;
+    border-radius: 50%;
+    margin-top: -2px;
+    margin-left: -2px;
+    z-index: 3;
+  }
+
+.marker{
+    position: absolute;
+    font-size: 15px;
+    z-index: -1;
+}
+
+.marker__col{
+    top: -2em;
+    left: 0;
+    width: 100%;
+    text-align: center
+}
+
+.marker__row {
+    left: -3em;
+    width: 2em;
+    text-align: right;
+    top: 1em;
+    height: 1em
+}
+
+.port {
+    display: flex;
+    flex-direction: column;
+    gap:1.5em;
+}
+
+.port-line{
+    display: flex;
+    gap:2em;
+}
+
+.port-ship{
+    position: relative;
+    border: 1px dotted #b2b2b9;
+    height:2em;
+}
+.ship-box{
+    z-index: 2;
+    position:absolute!important;
+    left: 0;
+    top: 0;
+    border: 2px solid #00f;
+    margin:-2px;
+    background: rgba(0,0,255,.05);
+    cursor:move;
+}
+
+.ship-box.error{
+    border:2px solid red;
+    background-color: rgb(245, 238, 205);
+    animation: shake 1s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    perspective: 1000px;
+}
+
+@keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
+
+.carrier {
+    width:10em;
+    height:2em;
+}
+.carrier[data-axis='y'] {
+    height:10em;
+    width:2em;
+}
+
+.battleship {
+    width: 8em;
+    height:2em;
+}
+.battleship[data-axis='y'] {
+    width: 2em;
+    height:8em;
+}
+
+.submarine,.destroyer {
+    width:6em;
+    height:2em;
+}
+.submarine[data-axis='y'], .destroyer[data-axis='y'] {
+    width:2em;
+    height:6em;
+}
+
+.patrol {
+    width:4em;
+    height:2em;
+}
+.patrol[data-axis='y'] {
+    width:2em;
+    height:4em;
+}
+
+.battlefield-cell__busy{
+    border-color: rgba(0,0,255,.1)
+}
+
+.battlefield-label{
+    text-align: center;
+    font-size:16px;
+}
+
+.battlefield__wait .battlefield-label{
+    opacity:0.4;
+}
+
+.battlefield-stat .ship{
+    display:grid;
+    grid-auto-flow: column;
+    gap:0.1em;
+}
+
+.battlefield-stat .ship-type{
+    display: flex;
+    gap:0.5em;
+}
+
+.battlefield-stat .ship-part{
+    width:7px;
+    height:7px;
+    background: #c5c5ff
+}
+
+.ship__killed .ship-part {
+    background: #ffaeae;
+}
+
+.placeships{
+    display: flex;
+    justify-content: center;
+    gap:3rem;
+    margin-top:2em;
+}
+
+.placeships-variant {
+    color: #0034ab;
+    border-bottom: 1px dotted;
+    cursor: pointer
+}
+.placeships-variant.inactive {
+    color: #999;
+    border-bottom: transparent;
+    cursor: default
+}
+
+.battlefield-start-button{
+    border: 1px solid #d6d6d6;
+    background: #d5efd6;
+    background: linear-gradient(to bottom,rgba(225,250,225,1) 0,rgba(195,222,197,1) 100%);
+    /* margin: 1em 0 0; */
+    padding: 0.2em 0.8em;
+    font-size: 1.2em;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 25%);
+    line-height: 1;
+    cursor: pointer;
+    outline: 0;
+}
+.none {
+    display:none;
+}
